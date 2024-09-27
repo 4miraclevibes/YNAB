@@ -1,0 +1,226 @@
+{
+    "categories": [
+        {
+            "id": "integer",
+            "name": "string",
+            "user_id": "foreignId",
+            "slug": "string",
+            "description": "string",
+            "image": "string",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        },
+        {
+            "relation": [
+                {
+                    "users": "BelongsTo"
+                }
+            ]
+        }
+    ],
+    "users": [
+        {
+            "id": "integer",
+            "name": "string",
+            "email": "string",
+            "created_at": "timestamp",
+            "updated_at": "timestamp",
+            "accounts": [
+                {
+                    "id": "integer",
+                    "user_id": "foreignId",
+                    "account_name": "string",
+                    "account_type": "string",
+                    "balance": "integer",
+                    "created_at": "timestamp",
+                    "updated_at": "timestamp"
+                },
+                {
+                    "relation": [
+                        {
+                            "users": "BelongsTo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "relation": [
+                {
+                    "accounts": "HasMany"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "id": "integer",
+            "user_id": "foreignId",
+            "account_name": "string",
+            "account_type": "string",
+            "balance": "integer",
+            "created_at": "timestamp",
+            "updated_at": "timestamp",
+            "transactions": [
+                {
+                    "id": "integer",
+                    "account_id": "foreignId",
+                    "category_id": "foreignId",
+                    "amount": "integer",
+                    "transaction_date": "timestamp",
+                    "type": "string",
+                    "description": "string",
+                    "created_at": "timestamp",
+                    "updated_at": "timestamp"
+                },
+                {
+                    "relation": [
+                        {
+                            "accounts": "BelongsTo",
+                            "categories": "BelongsTo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "relation": [
+                {
+                    "transactions": "HasMany"
+                }
+            ]
+        }
+    ],
+    "budget": [
+        {
+            "id": "integer",
+            "category_id": "foreignId",
+            "user_id": "foreignId",
+            "name": "string",
+            "amount": "integer",
+            "due_date": "timestamp",
+            "status": "string",
+            "created_at": "timestamp",
+            "updated_at": "timestamp",
+            "budget_transactions": [
+                {
+                    "id": "integer",
+                    "budget_id": "foreignId",
+                    "transaction_id": "foreignId",
+                    "amount": "integer",
+                    "created_at": "timestamp",
+                    "updated_at": "timestamp"
+                },
+                {
+                    "relation": [
+                        {
+                            "budgets": "BelongsTo",
+                            "transactions": "BelongsTo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "relation": [
+                {
+                    "butget_transactions": "HasMany"
+                }
+            ]
+        }
+    ],
+    "recurring_transactions": [
+        {
+            "id": "integer",
+            "user_id": "foreignId",
+            "category_id": "foreignId",
+            "amount": "integer",
+            "frequency": "string",
+            "next_occurrence": "timestamp",
+            "start_date": "timestamp",
+            "end_date": "timestamp",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        },
+        {
+            "relation": [
+                {
+                    "users": "BelongsTo"
+                },
+                {
+                    "categories": "BelongsTo"
+                }
+            ]
+        }   
+    ],
+    "goals": [
+        {
+            "id": "integer",
+            "user_id": "foreignId",
+            "name": "string",
+            "target_amount": "integer",
+            "current_amount": "integer",
+            "deadline": "timestamp",
+            "created_at": "timestamp",
+            "updated_at": "timestamp",
+            "goal_transactions": [
+                {
+                    "id": "integer",
+                    "goal_id": "foreignId",
+                    "amount": "integer",
+                    "transaction_date": "timestamp",
+                    "created_at": "timestamp",
+                    "updated_at": "timestamp"
+                },
+                {
+                    "relation": [
+                        {
+                            "goals": "BelongsTo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "relation": [
+                {
+                    "users": "BelongsTo"
+                }
+            ]
+        }
+    ],
+    "logs": [
+        {
+            "id": "integer",
+            "user_id": "foreignId",
+            "action": "string",
+            "description": "string",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        },
+        {
+            "relation": [
+                {
+                    "users": "BelongsTo"
+                }
+            ]
+        }
+    ],
+    "notifications": [
+        {
+            "id": "integer",
+            "user_id": "foreignId",
+            "message": "string",
+            "is_read": "boolean",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        },
+        {
+            "relation": [
+                {
+                    "users": "BelongsTo"
+                }
+            ]
+        }
+    ]
+}
