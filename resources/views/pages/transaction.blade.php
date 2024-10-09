@@ -101,15 +101,15 @@
             <div class="d-flex">
                 <div class="category-item me-3 {{ !$categoryId ? 'active' : '' }}">
                     <a href="{{ route('transactions.index') }}" class="text-decoration-none">
-                        <img src="https://via.placeholder.com/60/4CAF50/FFFFFF?text=$" alt="Semua" class="w-100 card">
-                        <p class="mb-0 text-dark">Semua</p>
+                        <img src="https://via.placeholder.com/60/{{ !$categoryId ? '4CAF50' : '0D6EFD' }}/FFFFFF?text=$" alt="Semua" class="w-100 card">
+                        <p class="mb-0 {{ !$categoryId ? 'text-success fw-bold fs-6' : 'text-muted' }}">Semua</p>
                     </a>
                 </div>
                 @foreach($categories as $category)
                 <div class="category-item me-3 position-relative {{ $categoryId == $category->id ? 'active' : '' }}">
                     <a href="{{ route('transactions.index', ['category_id' => $category->id]) }}" class="text-decoration-none">
-                        <img src="{{ $category->image ?? 'https://via.placeholder.com/60' }}" alt="{{ $category->name }}" class="w-100 card">
-                        <p class="mb-0 text-dark">{{ $category->name }}</p>
+                        <img src="https://via.placeholder.com/60/{{ $categoryId == $category->id ? '4CAF50' : '0D6EFD' }}/FFFFFF?text={{ $category->name }}" alt="{{ $category->name }}" class="w-100 card">
+                        <p class="mb-0 {{ $categoryId == $category->id ? 'text-success fw-bold fs-6' : 'text-muted' }}">{{ $category->name }}</p>
                     </a>
                     <form action="{{ route('categories.destroy', $category) }}" method="POST" class="position-absolute" style="top: 0; right: 0;">
                         @csrf
@@ -142,7 +142,7 @@
             <div class="transaction-card card mb-2">
                 <div class="card-body p-2">
                     <div class="d-flex">
-                        <img src="{{ $transaction->category->image ?? 'https://via.placeholder.com/80' }}" class="transaction-thumbnail me-3" alt="{{ $transaction->category->name }}">
+                        <img src="https://via.placeholder.com/80" class="transaction-thumbnail me-3" alt="{{ $transaction->category->name }}">
                         <div class="flex-grow-1 d-flex flex-column justify-content-between">
                             <h6 class="mb-0">{{ $transaction->description ?? 'Tidak ada deskripsi' }}</h6>
                             <p class="text-muted mb-0" style="font-size: 0.8rem">
