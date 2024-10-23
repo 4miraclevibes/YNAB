@@ -9,7 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use Illuminate\Support\Facades\Artisan;
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/goal', [GoalController::class, 'index'])->name('goal.index'); 
     Route::post('/goal', [GoalController::class, 'store'])->name('goal.store');
     Route::delete('/goal/{goal}', [GoalController::class, 'destroy'])->name('goal.destroy');
-    Route::get('/goal-transaction', [GoalController::class, 'goalTransactionStore'])->name('goal-transaction.store');
+    Route::post('/goal-transaction', [GoalController::class, 'goalTransactionStore'])->name('goal-transaction.store');
     Route::delete('/goal-transaction/{goalTransaction}', [GoalController::class, 'goalTransactionDestroy'])->name('goal-transaction.destroy');
     // Budget
     Route::get('/budget', [BudgetController::class, 'index'])->name('budgets.index'); 

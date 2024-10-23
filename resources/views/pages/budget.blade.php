@@ -144,21 +144,24 @@
         </h6>
         <div class="budget-transaction-list">
             @forelse($budgetTransactions as $transaction)
-                <div class="transaction-card card">
+                <div class="transaction-card card mb-2">
                     <div class="card-body p-2">
-                        <div class="d-flex">
-                            <img src="{{ $transaction->budget->category->image ?? 'https://via.placeholder.com/80' }}" class="transaction-thumbnail me-3" alt="{{ $transaction->budget->category->name }}">
-                            <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
                                 <h6 class="mb-0">{{ $transaction->description }}</h6>
                                 <p class="text-muted mb-0" style="font-size: 0.8rem">
-                                    {{ $transaction->budget->category->name }} • {{ $transaction->budget->name }} • {{ $transaction->transaction_date instanceof \Carbon\Carbon ? $transaction->transaction_date->format('d M Y') : date('d M Y', strtotime($transaction->transaction_date)) }}
+                                    {{ $transaction->budget->category->name }} • {{ $transaction->budget->name }}
+                                </p>
+                                <p class="text-muted mb-0" style="font-size: 0.8rem">
+                                    {{ $transaction->transaction_date instanceof \Carbon\Carbon ? $transaction->transaction_date->format('d M Y') : date('d M Y', strtotime($transaction->transaction_date)) }}
                                 </p>
                             </div>
-                            <div>
-                                <form action="{{ route('budget-transactions.destroy', $transaction) }}" method="POST" class="delete-budget-transaction-form">
+                            <div class="d-flex flex-column align-items-end">
+                                <span class="fw-bold">Rp {{ number_format($transaction->amount, 0, ',', '.') }}</span>
+                                <form action="{{ route('budget-transactions.destroy', $transaction) }}" method="POST" class="delete-budget-transaction-form mt-1">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
                                 </form>
                             </div>
                         </div>

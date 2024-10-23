@@ -11,35 +11,70 @@ class GoalController extends Controller
 {
     public function index()
     {
-        $goals = Goal::with('user')->where('user_id', Auth::user()->id)->get();
+        $goals = Goal::with('goalTransactions')->where('user_id', Auth::id())->get();
         return view('pages.goal', compact('goals'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['user_id'] = Auth::user()->id;
-        $goal = Goal::create($data);
-        return $goal;
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'target_amount' => 'required|numeric|min:0',
+            'deadline' => 'required|date',
+        ]);
+
+        $validatedData['user_id'] = Auth::id();
+        $validatedData['current_amount'] = 0;
+
+        $goal = Goal::create($validatedData);
+
+        return back()->with('success', 'Tujuan berhasil ditambahkan');
     }
 
     public function destroy(Goal $goal)
     {
+        if ($goal->user_id !== Auth::id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $goal->delete();
-        return $goal;
+        return back()->with('success', 'Tujuan berhasil dihapus');
     }
 
     public function goalTransactionStore(Request $request)
     {
-        $data = $request->all();
-        $data['user_id'] = Auth::user()->id;
-        $goalTransaction = GoalTransaction::create($data);
-        return $goalTransaction;
+        $validatedData = $request->validate([
+            'goal_id' => 'required|exists:goals,id',
+            'amount' => 'required|numeric|min:0',
+            'transaction_date' => 'required|date',
+        ]);
+
+        $goal = Goal::findOrFail($validatedData['goal_id']);
+
+        if ($goal->user_id !== Auth::id()) {
+            return back()->with('error', 'Unauthorized');
+        }
+
+        $goalTransaction = GoalTransaction::create($validatedData);
+
+        // Update current_amount of the goal
+        $goal->current_amount += $validatedData['amount'];
+        $goal->save();
+
+        return back()->with('success', 'Transaksi berhasil ditambahkan');
     }
 
     public function goalTransactionDestroy(GoalTransaction $goalTransaction)
     {
+        if ($goalTransaction->goal->user_id !== Auth::id()) {
+            return back()->with('error', 'Unauthorized');
+        }
+
+        // Update current_amount of the goal
+        $goalTransaction->goal->current_amount -= $goalTransaction->amount;
+        $goalTransaction->goal->save();
+
         $goalTransaction->delete();
-        return $goalTransaction;
+        return back()->with('success', 'Transaksi berhasil dihapus');
     }
 }
