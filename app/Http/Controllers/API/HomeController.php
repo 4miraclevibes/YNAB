@@ -15,17 +15,20 @@ class HomeController extends Controller
     {
         $user = Auth::user();
 
-        $transactions = Transaction::selectRaw('DATE(transaction_date) as date, SUM(amount) as total')
-            ->where('user_id', $user->id)
+        $transactions = Transaction::selectRaw('DATE(transactions.transaction_date) as date, SUM(transactions.amount) as total')
+            ->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+            ->where('accounts.user_id', $user->id)
             ->groupBy('date')
             ->orderBy('date')
             ->get();
 
         $averagePerDay = Category::withAvg(['transactions' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+                      ->where('accounts.user_id', $user->id);
             }], 'amount')
             ->withCount(['transactions' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+                      ->where('accounts.user_id', $user->id);
             }])
             ->get()
             ->map(function ($category) {
@@ -36,31 +39,35 @@ class HomeController extends Controller
             });
 
         $averagePerMonth = Category::withAvg(['transactions' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+                      ->where('accounts.user_id', $user->id);
             }], 'amount')
             ->withCount(['transactions' => function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->select(DB::raw('COUNT(DISTINCT DATE_FORMAT(transaction_date, "%Y-%m"))'));
+                $query->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+                      ->where('accounts.user_id', $user->id)
+                      ->select(DB::raw('COUNT(DISTINCT DATE_FORMAT(transactions.transaction_date, "%Y-%m"))'));
             }])
             ->get()
             ->map(function ($category) {
                 $category->avg_per_month = $category->transactions_count > 0
-                    ? $category->transactions_avg_amount * 30 // Asumsi 30 hari per bulan
+                    ? $category->transactions_avg_amount * 30
                     : 0;
                 return $category;
             });
 
         $averagePerYear = Category::withAvg(['transactions' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+                $query->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+                      ->where('accounts.user_id', $user->id);
             }], 'amount')
             ->withCount(['transactions' => function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->select(DB::raw('COUNT(DISTINCT YEAR(transaction_date))'));
+                $query->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+                      ->where('accounts.user_id', $user->id)
+                      ->select(DB::raw('COUNT(DISTINCT YEAR(transactions.transaction_date))'));
             }])
             ->get()
             ->map(function ($category) {
                 $category->avg_per_year = $category->transactions_count > 0
-                    ? $category->transactions_avg_amount * 365 // Asumsi 365 hari per tahun
+                    ? $category->transactions_avg_amount * 365
                     : 0;
                 return $category;
             });
