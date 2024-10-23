@@ -11,6 +11,8 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $isSqlite = DB::connection()->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME) === 'sqlite';
+
         $transactions = Transaction::selectRaw('DATE(transaction_date) as date, SUM(amount) as total')
             ->groupBy('date')
             ->orderBy('date')
@@ -27,8 +29,11 @@ class HomeController extends Controller
             });
 
         $averagePerMonth = Category::withAvg('transactions', 'amount')
-            ->withCount(['transactions' => function ($query) {
-                $query->select(DB::raw('COUNT(DISTINCT strftime("%Y-%m", transaction_date))'));
+            ->withCount(['transactions' => function ($query) use ($isSqlite) {
+                $dateFormat = $isSqlite 
+                    ? "strftime('%Y-%m', transaction_date)" 
+                    : "DATE_FORMAT(transaction_date, '%Y-%m')";
+                $query->select(DB::raw("COUNT(DISTINCT {$dateFormat})"));
             }])
             ->get()
             ->map(function ($category) {
@@ -39,8 +44,11 @@ class HomeController extends Controller
             });
 
         $averagePerYear = Category::withAvg('transactions', 'amount')
-            ->withCount(['transactions' => function ($query) {
-                $query->select(DB::raw('COUNT(DISTINCT strftime("%Y", transaction_date))'));
+            ->withCount(['transactions' => function ($query) use ($isSqlite) {
+                $yearFunction = $isSqlite 
+                    ? "strftime('%Y', transaction_date)" 
+                    : "YEAR(transaction_date)";
+                $query->select(DB::raw("COUNT(DISTINCT {$yearFunction})"));
             }])
             ->get()
             ->map(function ($category) {
