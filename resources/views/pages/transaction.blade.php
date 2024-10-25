@@ -86,13 +86,35 @@
     .category-item.active img {
         border: 2px solid #007bff;
     }
+
+    .banner-box {
+        height: 200px;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .banner-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .banner-box h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="container wrapper">
     <section class="banner mb-3">
-        <img src="https://via.placeholder.com/480x200/4CAF50/FFFFFF?text=Hai+{{ Auth::user()->name }}" alt="Banner" class="w-100 rounded">
+        <div class="banner-box mb-3 d-flex align-items-center justify-content-center rounded" style="height: 200px; background-color: #4CAF50; color: white;">
+            <h2>Hai, {{ Auth::user()->name }}</h2>
+        </div>
     </section>
 
     <section class="categories mb-4">
