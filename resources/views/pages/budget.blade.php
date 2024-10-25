@@ -148,7 +148,7 @@
                     <div class="card-body p-2">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="mb-0">{{ $transaction->description }}</h6>
+                                <h6 class="mb-0">{{ $transaction->description ?? 'Tidak ada deskripsi' }}</h6>
                                 <p class="text-muted mb-0" style="font-size: 0.8rem">
                                     {{ $transaction->budget->category->name }} • {{ $transaction->budget->name }}
                                 </p>
