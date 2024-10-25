@@ -18,4 +18,8 @@ class Account extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
+    }
 }

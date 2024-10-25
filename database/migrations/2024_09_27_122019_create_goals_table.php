@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('account_id')->constrained('accounts')->onDelete('cascade');
             $table->string('name');
             $table->integer('target_amount');
             $table->integer('current_amount');

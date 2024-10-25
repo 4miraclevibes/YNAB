@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Goal;
 use App\Models\GoalTransaction;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,8 +51,16 @@ class GoalController extends Controller
             'target_amount' => 'required|numeric|min:0',
             'deadline' => 'required|date',
         ]);
-
+        $account = Account::where('user_id', Auth::id())->where('account_name', 'Goal Account')->first();
+        if (!$account) {
+            return response()->json([
+                'data' => null,
+                'message' => 'Goal Account not found, make sure you have a "Goal Account" in your account list',
+                'code' => 404
+            ], 404);
+        }
         $validatedData['user_id'] = Auth::id();
+        $validatedData['account_id'] = $account->id;
         $validatedData['current_amount'] = 0;
 
         $goal = Goal::create($validatedData);
