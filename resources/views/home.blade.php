@@ -95,10 +95,14 @@
             }],
             xaxis: {
                 categories: data.map(t => t.date),
-                tickAmount: Math.min(data.length, 10),
                 labels: {
-                    rotate: -45,
-                    rotateAlways: true
+                    show: false // Menyembunyikan label tanggal
+                },
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
                 }
             },
             title: {
@@ -125,10 +129,14 @@
         },
         xaxis: {
             categories: transactions['1M'].map(t => t.date),
-            tickAmount: Math.min(transactions['1M'].length, 10),
             labels: {
-                rotate: -45,
-                rotateAlways: true
+                show: false // Menyembunyikan label tanggal
+            },
+            axisBorder: {
+                show: false
+            },
+            axisTicks: {
+                show: false
             }
         },
         yaxis: {
@@ -142,6 +150,9 @@
             text: 'Grafik Total Transaksi (1M)'
         },
         tooltip: {
+            x: {
+                format: 'dd MMM yyyy' // Format tanggal pada tooltip
+            },
             y: {
                 formatter: function (value) {
                     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value);
