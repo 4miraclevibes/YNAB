@@ -35,7 +35,7 @@ class GoalSeeder extends Seeder
             'user_id' => 1,
             'account_id' => $account->id,
             'name' => 'Vacation',
-            'target_amount' => 1000,
+            'target_amount' => 10000000,
             'current_amount' => 0,
             'deadline' => '2025-01-01'
         ]);
