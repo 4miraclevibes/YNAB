@@ -13,11 +13,6 @@ class HomeController extends Controller
     {
         $isSqlite = DB::connection()->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME) === 'sqlite';
 
-        $transactions = Transaction::selectRaw('DATE(transaction_date) as date, SUM(amount) as total')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
-
         $averagePerDay = Category::withAvg('transactions', 'amount')
             ->withCount('transactions')
             ->get()
@@ -57,6 +52,28 @@ class HomeController extends Controller
                     : 0;
                 return $category;
             });
+
+        $endDate = Carbon::now();
+        $ranges = [
+            '1D' => Carbon::now()->subDay(),
+            '1M' => Carbon::now()->subMonth(),
+            '3M' => Carbon::now()->subMonths(3),
+            'YTD' => Carbon::now()->startOfYear(),
+            '1Y' => Carbon::now()->subYear(),
+            '3Y' => Carbon::now()->subYears(3),
+            '5Y' => Carbon::now()->subYears(5),
+            '10Y' => Carbon::now()->subYears(10),
+            'All' => Transaction::min('transaction_date')
+        ];
+
+        $transactions = [];
+        foreach ($ranges as $key => $startDate) {
+            $transactions[$key] = Transaction::selectRaw('DATE(transaction_date) as date, SUM(amount) as total')
+                ->whereBetween('transaction_date', [$startDate, $endDate])
+                ->groupBy('date')
+                ->orderBy('date')
+                ->get();
+        }
 
         return view('home', compact('transactions', 'averagePerDay', 'averagePerMonth', 'averagePerYear'));
     }

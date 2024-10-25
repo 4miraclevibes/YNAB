@@ -5,6 +5,11 @@
         <h1>Home</h1>
         
         <div class="chart-container mb-4">
+            <div class="btn-group mb-3" role="group" aria-label="Rentang Waktu">
+                @foreach(['1D', '1M', '3M', 'YTD', '1Y', '3Y', '5Y', '10Y', 'All'] as $range)
+                    <button type="button" class="btn btn-outline-secondary range-selector" data-range="{{ $range }}">{{ $range }}</button>
+                @endforeach
+            </div>
             <div id="transactionChart" style="height: 300px; min-width: 100%;"></div>
         </div>
 
@@ -78,15 +83,39 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     var transactions = @json($transactions);
+    var currentRange = '1M'; // Default range
+    var chart;
+
+    function updateChart(range) {
+        var data = transactions[range];
+        chart.updateOptions({
+            series: [{
+                name: 'Total Transaksi',
+                data: data.map(t => t.total)
+            }],
+            xaxis: {
+                categories: data.map(t => t.date),
+                tickAmount: Math.min(data.length, 10),
+                labels: {
+                    rotate: -45,
+                    rotateAlways: true
+                }
+            },
+            title: {
+                text: 'Grafik Total Transaksi (' + range + ')'
+            }
+        });
+    }
+
     var options = {
         series: [{
             name: 'Total Transaksi',
-            data: transactions.map(t => t.total)
+            data: transactions['1M'].map(t => t.total)
         }],
         chart: {
             type: 'line',
             height: 500,
-            width: Math.max(transactions.length * 100, window.innerWidth),
+            width: '100%',
             zoom: {
                 enabled: false
             },
@@ -95,8 +124,8 @@
             }
         },
         xaxis: {
-            categories: transactions.map(t => t.date),
-            tickAmount: 4,
+            categories: transactions['1M'].map(t => t.date),
+            tickAmount: Math.min(transactions['1M'].length, 10),
             labels: {
                 rotate: -45,
                 rotateAlways: true
@@ -110,7 +139,7 @@
             }
         },
         title: {
-            text: 'Grafik Total Transaksi per Hari'
+            text: 'Grafik Total Transaksi (1M)'
         },
         tooltip: {
             y: {
@@ -127,7 +156,16 @@
         }
     };
 
-    var chart = new ApexCharts(document.querySelector("#transactionChart"), options);
+    chart = new ApexCharts(document.querySelector("#transactionChart"), options);
     chart.render();
+
+    document.querySelectorAll('.range-selector').forEach(button => {
+        button.addEventListener('click', function() {
+            var range = this.getAttribute('data-range');
+            updateChart(range);
+            document.querySelectorAll('.range-selector').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
 </script>
 @endpush
