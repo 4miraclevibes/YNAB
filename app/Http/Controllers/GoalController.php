@@ -24,6 +24,11 @@ class GoalController extends Controller
             'deadline' => 'required|date',
         ]);
 
+        $account = Account::where('user_id', Auth::id())->where('account_name', 'Goal Account')->first();
+        if (!$account) {
+            return back()->with('error', 'Goal Account not found, make sure you have a "Goal Account" in your account list');
+        }
+
         $validatedData['user_id'] = Auth::id();
         $validatedData['current_amount'] = 0;
 
