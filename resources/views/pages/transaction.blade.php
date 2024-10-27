@@ -217,10 +217,6 @@
                         <label for="description" class="form-label">Deskripsi</label>
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="image" class="form-label">URL Gambar Kategori</label>
-                        <input type="url" class="form-control" id="image" name="image" placeholder="https://example.com/image.jpg">
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
