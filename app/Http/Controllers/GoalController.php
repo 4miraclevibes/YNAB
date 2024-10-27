@@ -31,6 +31,7 @@ class GoalController extends Controller
 
         $validatedData['user_id'] = Auth::id();
         $validatedData['current_amount'] = 0;
+        $validatedData['account_id'] = $account->id;
 
         $goal = Goal::create($validatedData);
 
