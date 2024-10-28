@@ -57,17 +57,34 @@ self.addEventListener("fetch", (event) => {
 });
 
 // Notifikasi setiap 2 detik
+const messages = [
+  'Jangan lupa catat pengeluaranmu hari ini!',
+  'Sudah update budget bulan ini?',
+  'Yuk cek saldo keuanganmu!',
+  'Ada transaksi baru di YNAB!'
+];
+
 const showNotification = () => {
-  if (self.registration) {  // Pastikan registration tersedia
+  if (self.registration) {
     self.registration.showNotification('YNAB Notification', {
-      body: 'Jangan lupa catet keuanganmu di YNAB!',
+      body: 'Ada transaksi baru di YNAB!',
       icon: '/logo.png',
-      tag: 'ynab-notification'
-    }).catch(err => console.error('Error showing notification:', err));
+      tag: 'ynab-notification',
+      actions: [
+        {
+          action: 'open',
+          title: 'Buka YNAB'
+        },
+        {
+          action: 'close',
+          title: 'Tutup'
+        }
+      ]
+    });
   }
 };
 
-const intervalID = setInterval(showNotification, 10000);
+const intervalID = setInterval(showNotification, 36000);
 
 // Optional: cleanup interval
 self.addEventListener('terminate', () => {

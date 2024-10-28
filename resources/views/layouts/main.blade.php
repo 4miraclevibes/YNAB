@@ -289,23 +289,23 @@
     @yield('scripts')
     @stack('scripts')
     <script src="{{ asset('/sw.js') }}"></script>
-<script>
-if ("serviceWorker" in navigator) {
-  // Minta izin notifikasi terlebih dahulu
-  Notification.requestPermission().then(permission => {
-    if (permission === 'granted') {
-      // Register service worker setelah dapat izin
-      navigator.serviceWorker.register("/sw.js").then(
-        registration => {
-          console.log("ServiceWorker berhasil diregistrasi:", registration);
-        },
-        error => {
-          console.error("ServiceWorker gagal diregistrasi:", error);
+    <script>
+    if ("serviceWorker" in navigator) {
+    // Minta izin notifikasi terlebih dahulu
+    Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+        // Register service worker setelah dapat izin
+        navigator.serviceWorker.register("/sw.js").then(
+            registration => {
+                    console.log("ServiceWorker berhasil diregistrasi:", registration);
+                    },
+                    error => {
+                    console.error("ServiceWorker gagal diregistrasi:", error);
+                    }
+                );
+                }
+            });
         }
-      );
-    }
-  });
-}
-</script>
+    </script>
   </body>
 </html>
