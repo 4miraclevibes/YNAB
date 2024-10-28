@@ -84,7 +84,23 @@ const showNotification = () => {
   }
 };
 
-const intervalID = setInterval(showNotification, 36000);
+// Tambahkan event listener untuk handle click notification
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close(); // Tutup notifikasi
+
+  if (event.action === 'open') {
+    // Buka aplikasi YNAB
+    clients.openWindow('/');
+  } else if (event.action === 'close') {
+    // Hanya tutup notifikasi
+    return;
+  } else {
+    // Jika user klik di area notifikasi (bukan di action button)
+    clients.openWindow('/');
+  }
+});
+
+const intervalID = setInterval(showNotification, 2000);
 
 // Optional: cleanup interval
 self.addEventListener('terminate', () => {
