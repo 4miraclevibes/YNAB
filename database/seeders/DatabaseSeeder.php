@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             AccountSeeder::class,
             CategorySeeder::class,
             BudgetSeeder::class,
+            GoalSeeder::class,
         ]);
     }
 }
