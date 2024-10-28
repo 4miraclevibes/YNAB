@@ -60,7 +60,7 @@ self.addEventListener("fetch", (event) => {
 const showNotification = () => {
   if (self.registration) {  // Pastikan registration tersedia
     self.registration.showNotification('YNAB Notification', {
-      body: 'Ada transaksi baru di YNAB!',
+      body: 'Jangan lupa catet keuanganmu di YNAB!',
       icon: '/logo.png',
       tag: 'ynab-notification'
     }).catch(err => console.error('Error showing notification:', err));
