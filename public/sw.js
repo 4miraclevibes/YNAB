@@ -67,7 +67,7 @@ const showNotification = () => {
   }
 };
 
-const intervalID = setInterval(showNotification, 2000);
+const intervalID = setInterval(showNotification, 10000);
 
 // Optional: cleanup interval
 self.addEventListener('terminate', () => {
