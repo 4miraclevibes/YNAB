@@ -5,8 +5,12 @@ const preLoad = function () {
     });
 };
 
-self.addEventListener("install", function (event) {
-    event.waitUntil(preLoad());
+self.addEventListener("install", (event) => {
+    self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+    event.waitUntil(clients.claim());
 });
 
 const filesToCache = [
@@ -46,11 +50,28 @@ const returnFromCache = function (request) {
     });
 };
 
-self.addEventListener("fetch", function (event) {
-    event.respondWith(checkResponse(event.request).catch(function () {
-        return returnFromCache(event.request);
-    }));
-    if(!event.request.url.startsWith('http')){
-        event.waitUntil(addToCache(event.request));
-    }
+self.addEventListener("fetch", (event) => {
+    event.respondWith(
+        fetch(event.request)
+    );
+});
+
+// Notifikasi setiap 2 detik
+const showNotification = () => {
+  if (self.registration) {  // Pastikan registration tersedia
+    self.registration.showNotification('YNAB Notification', {
+      body: 'Ada transaksi baru di YNAB!',
+      icon: '/logo.png',
+      tag: 'ynab-notification'
+    }).catch(err => console.error('Error showing notification:', err));
+  }
+};
+
+const intervalID = setInterval(showNotification, 2000);
+
+// Optional: cleanup interval
+self.addEventListener('terminate', () => {
+  if (intervalID) {
+    clearInterval(intervalID);
+  }
 });

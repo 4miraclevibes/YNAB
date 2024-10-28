@@ -290,20 +290,22 @@
     @stack('scripts')
     <script src="{{ asset('/sw.js') }}"></script>
 <script>
-   if ("serviceWorker" in navigator) {
-      // Register a service worker hosted at the root of the
-      // site using the default scope.
+if ("serviceWorker" in navigator) {
+  // Minta izin notifikasi terlebih dahulu
+  Notification.requestPermission().then(permission => {
+    if (permission === 'granted') {
+      // Register service worker setelah dapat izin
       navigator.serviceWorker.register("/sw.js").then(
-      (registration) => {
-         console.log("Service worker registration succeeded:", registration);
-      },
-      (error) => {
-         console.error(`Service worker registration failed: ${error}`);
-      },
-    );
-  } else {
-     console.error("Service workers are not supported.");
-  }
+        registration => {
+          console.log("ServiceWorker berhasil diregistrasi:", registration);
+        },
+        error => {
+          console.error("ServiceWorker gagal diregistrasi:", error);
+        }
+      );
+    }
+  });
+}
 </script>
   </body>
 </html>
