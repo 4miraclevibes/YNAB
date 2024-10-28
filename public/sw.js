@@ -100,7 +100,7 @@ self.addEventListener('notificationclick', function(event) {
   }
 });
 
-const intervalID = setInterval(showNotification, 2000);
+const intervalID = setInterval(showNotification, 15000);
 
 // Optional: cleanup interval
 self.addEventListener('terminate', () => {
