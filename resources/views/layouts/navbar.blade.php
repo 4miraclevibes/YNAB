@@ -1,7 +1,7 @@
 <nav class="navbar border-bottom">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <i class="bi bi-cash-coin" style="font-size: 2rem;"></i>
+            <img src="{{ asset('images/logo-ynab.png') }}" alt="YNAB Logo" style="width: 30px; height: 30px;">
         </a>
         <ul class="navbar-nav d-flex flex-row">
             @guest

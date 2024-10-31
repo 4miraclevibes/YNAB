@@ -70,18 +70,14 @@
             <div class="d-flex">
                 <div class="account-item me-3 {{ !$accountId ? 'active' : '' }}">
                     <a href="{{ route('accounts.index') }}" class="text-decoration-none">
-                        <div class="account-box d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background-color: #4CAF50; color: white; border-radius: 10%;">
-                            <span class="fs-4">ALL</span>
-                        </div>
+                        <img src="{{ asset('images/account-blue.png') }}" alt="Account" style="width: 80px; height: 80px;" class="{{ !$accountId ? 'bg-warning' : '' }}">
                         <p class="mb-0 text-dark">Semua</p>
                     </a>
                 </div>
                 @foreach($accounts as $account)
                 <div class="account-item me-3 position-relative {{ $accountId == $account->id ? 'active' : '' }}">
                     <a href="{{ route('accounts.index', ['account_id' => $account->id]) }}" class="text-decoration-none">
-                        <div class="account-box d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background-color: {{ $account->account_type == 'cash' ? '#4CAF50' : ($account->account_type == 'bank' ? '#2196F3' : ($account->account_type == 'credit_card' ? '#FF5722' : ($account->account_type == 'e_wallet' ? '#FFC107' : '#9E9E9E'))) }}; color: white; border-radius: 10%;">
-                            <span class="fs-4">{{ strtoupper(substr($account->account_type, 0, 3)) }}</span>
-                        </div>
+                        <img src="{{ asset('images/account-blue.png') }}" alt="Account" style="width: 80px; height: 80px;" class="{{ $accountId == $account->id ? 'bg-warning' : '' }}">
                         <p class="mb-0 text-dark">{{ $account->account_name }}</p>
                         <p class="mb-0 text-muted">Rp {{ number_format($account->balance, 0, ',', '.') }}</p>
                     </a>

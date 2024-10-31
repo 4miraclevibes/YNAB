@@ -90,18 +90,14 @@
             <div class="d-flex">
                 <div class="budget-item me-3 {{ !$budgetId ? 'active' : '' }}">
                     <a href="{{ route('budgets.index') }}" class="text-decoration-none">
-                        <div class="budget-box d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; background-color: #4CAF50; color: white; border-radius: 10%;">
-                            <span class="fs-2">ALL</span>
-                        </div>
+                        <img src="{{ asset('images/budget-blue.png') }}" alt="Budget" style="width: 150px; height: 150px;" class="{{ !$budgetId ? 'border border-warning border-5' : '' }}">
                         <p class="mb-0 text-dark">Semua</p>
                     </a>
                 </div>
                 @foreach($budgets as $budget)
                 <div class="budget-item me-3 position-relative {{ $budgetId == $budget->id ? 'active' : '' }}">
                     <a href="{{ route('budgets.index', ['budget_id' => $budget->id]) }}" class="text-decoration-none">
-                        <div class="budget-box d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; background-color: #0D6EFD; color: white; border-radius: 10%;">
-                            <span class="fs-2">{{ strtoupper(substr($budget->name, 0, 4)) }}</span>
-                        </div>
+                        <img src="{{ asset('images/budget-blue.png') }}" alt="Budget" style="width: 150px; height: 150px;" class="{{ $budgetId == $budget->id ? 'border border-warning border-5' : '' }}">
                         <p class="mb-0 text-dark">{{ $budget->name }}</p>
                         <p class="mb-0 text-muted">Rp {{ number_format($budget->amount, 0, ',', '.') }}</p>
                         <p class="mb-0 text-muted" style="font-size: 0.7rem;">

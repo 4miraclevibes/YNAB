@@ -86,37 +86,11 @@
     .category-item.active img {
         border: 2px solid #007bff;
     }
-
-    .banner-box {
-        height: 200px;
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .banner-box:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .banner-box h2 {
-        font-size: 2rem;
-        font-weight: bold;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-    }
 </style>
 @endsection
 
 @section('content')
 <div class="container wrapper">
-    <section class="banner mb-3">
-        <div class="banner-box mb-3 d-flex align-items-center justify-content-center rounded" style="height: 200px; background-color: #4CAF50; color: white;">
-            <h2>Hai, {{ Auth::user()->name }}</h2>
-        </div>
-    </section>
-
     <section class="categories mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="mb-0">Kategori</h6>
@@ -128,18 +102,14 @@
             <div class="d-flex">
                 <div class="category-item me-3 {{ !$categoryId ? 'active' : '' }}">
                     <a href="{{ route('transactions.index') }}" class="text-decoration-none">
-                        <div class="category-box w-100 card d-flex align-items-center justify-content-center" style="height: 60px; background-color: {{ !$categoryId ? '#4CAF50' : '#0D6EFD' }};">
-                            <span class="text-white">All</span>
-                        </div>
+                        <img src="{{ asset('images/category-blue.png') }}" class="{{ !$categoryId ? 'bg-warning' : '' }}" alt="Category" style="width: 80px; height: 80px;">
                         <p class="mb-0 {{ !$categoryId ? 'text-success fw-bold fs-6' : 'text-muted' }}">Semua</p>
                     </a>
                 </div>
                 @foreach($categories as $category)
                 <div class="category-item me-3 position-relative {{ $categoryId == $category->id ? 'active' : '' }}">
                     <a href="{{ route('transactions.index', ['category_id' => $category->id]) }}" class="text-decoration-none">
-                        <div class="category-box w-100 card d-flex align-items-center justify-content-center" style="height: 60px; background-color: {{ $categoryId == $category->id ? '#4CAF50' : '#0D6EFD' }};">
-                            <span class="text-white">{{ substr($category->name, 0, 4) }}</span>
-                        </div>
+                        <img src="{{ asset('images/category-blue.png') }}" alt="Category" class="{{ $categoryId == $category->id ? 'bg-warning' : '' }}" style="width: 80px; height: 80px;">
                         <p class="mb-0 {{ $categoryId == $category->id ? 'text-success fw-bold fs-6' : 'text-muted' }}">{{ $category->name }}</p>
                     </a>
                     <form action="{{ route('categories.destroy', $category) }}" method="POST" class="position-absolute" style="top: 0; right: 0;">
@@ -168,14 +138,12 @@
                 Tambah Transaksi
             </button>
         </div>
-        <div class="transaction-list" style="max-height: 400px; overflow-y: auto;">
+        <div class="transaction-list" style="max-height: 50vh; overflow-y: auto;">
             @foreach($transactions as $transaction)
             <div class="transaction-card card mb-2">
                 <div class="card-body p-2">
                     <div class="d-flex">
-                        <div class="transaction-thumbnail me-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background-color: #0D6EFD; color: white; border-radius: 10px;">
-                            <span>{{ strtoupper(substr($transaction->category->name, 0, 3)) }}</span>
-                        </div>
+                        <img src="{{ asset('images/transaction-blue.png') }}" alt="Category" class="border border-warning border-5 p-1 mx-1" style="width: 80px; height: 80px;">
                         <div class="flex-grow-1 d-flex flex-column justify-content-between">
                             <h6 class="mb-0">{{ $transaction->description ?? 'Tidak ada deskripsi' }}</h6>
                             <p class="text-muted mb-0" style="font-size: 0.8rem">
