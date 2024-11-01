@@ -58,10 +58,7 @@ self.addEventListener("fetch", (event) => {
 
 // Notifikasi setiap 2 detik
 const messages = [
-  'Jangan lupa catat pengeluaranmu hari ini!',
-  'Sudah update budget bulan ini?',
-  'Yuk cek saldo keuanganmu!',
-  'Ada transaksi baru di YNAB!'
+  'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!'
 ];
 
 const showNotification = () => {
