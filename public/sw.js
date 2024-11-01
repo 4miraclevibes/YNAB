@@ -64,7 +64,7 @@ const messages = [
 const showNotification = () => {
   if (self.registration) {
     self.registration.showNotification('YNAB Notification', {
-      body: 'Ada transaksi baru di YNAB!',
+      body: 'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!',
       icon: '/logo.png',
       tag: 'ynab-notification',
       actions: [
