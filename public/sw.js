@@ -56,7 +56,7 @@ self.addEventListener("fetch", (event) => {
     );
 });
 
-// Notifikasi setiap 2 detik
+// Notifikasi setiap 15 detik
 const messages = [
   'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!'
 ];
