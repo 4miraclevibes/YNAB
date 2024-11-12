@@ -58,13 +58,13 @@ self.addEventListener("fetch", (event) => {
 
 // Notifikasi setiap 15 detik
 const messages = [
-  'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!'
+  'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!!!!'
 ];
 
 const showNotification = () => {
   if (self.registration) {
     self.registration.showNotification('YNAB Notification', {
-      body: 'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!',
+      body: 'Keuangannya sudah dicatat belum? Ayo catat keuangan kamu sekarang!!!!!',
       icon: '/logo.png',
       tag: 'ynab-notification',
       actions: [
