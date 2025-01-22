@@ -50,8 +50,8 @@
                             $daysLeft = $today->diff($deadline)->days;
                             $monthsLeft = ceil($daysLeft / 30);
                             $remainingAmount = $goal->target_amount - $goal->current_amount;
-                            $dailyRecommendation = $daysLeft > 0 ? ceil($remainingAmount / $daysLeft) : 0;
-                            $monthlyRecommendation = $monthsLeft > 0 ? ceil($remainingAmount / $monthsLeft) : 0;
+                            $dailyRecommendation = $daysLeft > 0 ? ceil($goal->target_amount / $daysLeft) : 0;
+                            $monthlyRecommendation = $goal->monthly_savings;
                         @endphp
                         
                         @if($daysLeft > 0 && $remainingAmount > 0)

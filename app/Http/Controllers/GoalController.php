@@ -41,6 +41,12 @@ class GoalController extends Controller
         // Set deadline berdasarkan jumlah bulan yang dibutuhkan
         $validatedData['deadline'] = now()->addMonths($months_needed);
 
+        // Tambahkan debug info
+        \Log::info('Monthly Income: ' . $validatedData['monthly_income']);
+        \Log::info('Monthly Savings: ' . $validatedData['monthly_savings']);
+        \Log::info('Target Amount: ' . $validatedData['target_amount']);
+        \Log::info('Months Needed: ' . $months_needed);
+
         $goal = Goal::create($validatedData);
 
         return back()->with('success', 'Tujuan berhasil ditambahkan');
