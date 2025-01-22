@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('name');
             $table->integer('target_amount');
             $table->integer('current_amount');
+            $table->integer('monthly_income');
+            $table->integer('monthly_savings');
             $table->date('deadline');
             $table->timestamps();
         });

@@ -21,7 +21,7 @@ class GoalController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'target_amount' => 'required|numeric|min:0',
-            'deadline' => 'required|date',
+            'monthly_income' => 'required|numeric|min:0',
         ]);
 
         $account = Account::where('user_id', Auth::id())->where('account_name', 'Goal Account')->first();
@@ -32,6 +32,14 @@ class GoalController extends Controller
         $validatedData['user_id'] = Auth::id();
         $validatedData['current_amount'] = 0;
         $validatedData['account_id'] = $account->id;
+        // Hitung monthly savings (25% dari monthly income)
+        $validatedData['monthly_savings'] = $validatedData['monthly_income'] * 0.25;
+        
+        // Hitung berapa bulan yang dibutuhkan untuk mencapai target
+        $months_needed = ceil($validatedData['target_amount'] / $validatedData['monthly_savings']);
+        
+        // Set deadline berdasarkan jumlah bulan yang dibutuhkan
+        $validatedData['deadline'] = now()->addMonths($months_needed);
 
         $goal = Goal::create($validatedData);
 

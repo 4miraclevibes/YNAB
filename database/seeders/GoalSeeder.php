@@ -31,13 +31,20 @@ class GoalSeeder extends Seeder
             ]);
         }
 
+        $monthly_income = 10000000; // Contoh gaji Rp 10.000.000
+        $target_amount = 60000000;  // Target Rp 60.000.000
+        $monthly_savings = $monthly_income * 0.25; // 25% dari gaji
+        $months_needed = ceil($target_amount / $monthly_savings);
+        
         Goal::create([
             'user_id' => 1,
             'account_id' => $account->id,
             'name' => 'Vacation',
-            'target_amount' => 10000000,
+            'target_amount' => $target_amount,
             'current_amount' => 0,
-            'deadline' => '2025-01-01'
+            'monthly_income' => $monthly_income,
+            'monthly_savings' => $monthly_savings,
+            'deadline' => now()->addMonths($months_needed)
         ]);
     }
 }

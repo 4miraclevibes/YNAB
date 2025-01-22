@@ -36,7 +36,10 @@
                         <h5 class="card-title">{{ $goal->name }}</h5>
                         <p class="card-text">Target: Rp {{ number_format($goal->target_amount, 0, ',', '.') }}</p>
                         <p class="card-text">Terkumpul: Rp {{ number_format($goal->current_amount, 0, ',', '.') }}</p>
-                        <p class="card-text">Tenggat: {{ $goal->deadline }}</p>
+                        <p class="card-text">Tenggat: {{ \Carbon\Carbon::parse($goal->deadline)->locale('id')->isoFormat('D MMMM Y') }}</p>
+                        <p class="card-text">Gaji Bulanan: Rp {{ number_format($goal->monthly_income, 0, ',', '.') }}</p>
+                        <p class="card-text">Rencana Tabungan (25%): Rp {{ number_format($goal->monthly_savings, 0, ',', '.') }}</p>
+                        
                         <div class="progress mb-3">
                             <div class="progress-bar" role="progressbar" style="width: {{ ($goal->current_amount / $goal->target_amount) * 100 }}%"></div>
                         </div>
@@ -45,20 +48,27 @@
                             $today = new DateTime();
                             $deadline = new DateTime($goal->deadline);
                             $daysLeft = $today->diff($deadline)->days;
+                            $monthsLeft = ceil($daysLeft / 30);
                             $remainingAmount = $goal->target_amount - $goal->current_amount;
                             $dailyRecommendation = $daysLeft > 0 ? ceil($remainingAmount / $daysLeft) : 0;
+                            $monthlyRecommendation = $monthsLeft > 0 ? ceil($remainingAmount / $monthsLeft) : 0;
                         @endphp
                         
                         @if($daysLeft > 0 && $remainingAmount > 0)
-                            <p class="card-text">
-                                <strong>Rekomendasi tabungan harian:</strong> 
-                                Rp {{ number_format($dailyRecommendation, 0, ',', '.') }} per hari
-                                untuk {{ $daysLeft }} hari tersisa
-                            </p>
+                            <div class="mb-3">
+                                <strong>Rekomendasi tabungan:</strong><br>
+                                • Rp {{ number_format($dailyRecommendation, 0, ',', '.') }} per hari<br>
+                                • Rp {{ number_format($monthlyRecommendation, 0, ',', '.') }} per bulan<br>
+                                <small class="text-muted">untuk {{ $monthsLeft }} bulan ({{ $daysLeft }} hari) tersisa</small>
+                            </div>
                         @elseif($remainingAmount <= 0)
-                            <p class="card-text text-success"><strong>Selamat! Target sudah tercapai.</strong></p>
+                            <div class="mb-3">
+                                <strong class="text-success">Selamat! Target sudah tercapai.</strong>
+                            </div>
                         @else
-                            <p class="card-text text-danger"><strong>Tenggat waktu sudah lewat.</strong></p>
+                            <div class="mb-3">
+                                <strong class="text-danger">Tenggat waktu sudah lewat.</strong>
+                            </div>
                         @endif
 
                         <button class="btn btn-sm btn-success mb-2" data-bs-toggle="modal" data-bs-target="#addTransactionModal" data-goal-id="{{ $goal->id }}">
@@ -117,8 +127,8 @@
                         <input type="number" class="form-control" id="target_amount" name="target_amount" required>
                     </div>
                     <div class="mb-3">
-                        <label for="deadline" class="form-label">Tenggat Waktu</label>
-                        <input type="date" class="form-control" id="deadline" name="deadline" required>
+                        <label for="monthly_income" class="form-label">Gaji Per Bulan</label>
+                        <input type="number" class="form-control" id="monthly_income" name="monthly_income" required placeholder="Masukkan gaji per bulan">
                     </div>
                 </div>
                 <div class="modal-footer">
