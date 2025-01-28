@@ -124,11 +124,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="target_amount" class="form-label">Target Jumlah</label>
-                        <input type="number" class="form-control" id="target_amount" name="target_amount" required>
+                        <input type="text" class="form-control number-format" id="target_amount" name="target_amount" required>
+                        <input type="hidden" name="target_amount_value">
                     </div>
                     <div class="mb-3">
                         <label for="monthly_income" class="form-label">Gaji Per Bulan</label>
-                        <input type="number" class="form-control" id="monthly_income" name="monthly_income" required placeholder="Masukkan gaji per bulan">
+                        <input type="text" class="form-control number-format" id="monthly_income" name="monthly_income" required placeholder="Masukkan gaji per bulan">
+                        <input type="hidden" name="monthly_income_value">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -154,7 +156,8 @@
                     <input type="hidden" id="goal_id" name="goal_id">
                     <div class="mb-3">
                         <label for="amount" class="form-label">Jumlah</label>
-                        <input type="number" class="form-control" id="amount" name="amount" required>
+                        <input type="text" class="form-control number-format" id="amount" name="amount" required>
+                        <input type="hidden" name="amount_value">
                     </div>
                     <div class="mb-3">
                         <label for="transaction_date" class="form-label">Tanggal Transaksi</label>
@@ -180,5 +183,31 @@
         var modalBodyInput = addTransactionModal.querySelector('.modal-body input[name="goal_id"]')
         modalBodyInput.value = goalId
     })
+
+    // Format number dengan koma
+    document.querySelectorAll('.number-format').forEach(function(input) {
+        input.addEventListener('input', function(e) {
+            // Hapus semua karakter selain angka
+            let value = this.value.replace(/[^\d]/g, '');
+            
+            // Format angka dengan koma
+            if (value !== '') {
+                value = parseInt(value).toLocaleString('id-ID');
+                this.value = value;
+            }
+            
+            // Simpan nilai asli tanpa koma ke hidden input
+            let hiddenInput = this.name + '_value';
+            document.getElementsByName(hiddenInput)[0].value = this.value.replace(/[^\d]/g, '');
+        });
+    });
+
+    // Handle form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+        document.querySelectorAll('.number-format').forEach(function(input) {
+            // Gunakan nilai dari hidden input
+            input.value = document.getElementsByName(input.name + '_value')[0].value;
+        });
+    });
 </script>
 @endsection
